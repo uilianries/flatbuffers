@@ -10,9 +10,11 @@ environment:
     # Workaround for https://github.com/conda/conda-build/issues/636
     PYTHONIOENCODING: UTF-8
     CONDA_INSTALL_LOCN: "C:\\Miniconda35-x64"
+    VS150COMNTOOLS: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\Tools\\"
 
   matrix:
     - CMAKE_VS_VERSION: "10 2010"
+    - CMAKE_VS_VERSION: "12 2013"
     - CMAKE_VS_VERSION: "14 2015"
 
 platform:
@@ -31,6 +33,10 @@ before_build:
 build:
   project: ALL_BUILD.vcxproj
   verbosity: minimal
+
+after_build:
+  - python conan/appveyor/install.py
+  - python conan/appveyor/build.py
 
 install:
   - set PATH=%CONDA_INSTALL_LOCN%;%CONDA_INSTALL_LOCN%\scripts;%PATH%;
