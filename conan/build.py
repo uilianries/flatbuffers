@@ -43,5 +43,5 @@ if __name__ == "__main__":
         upload_only_when_stable=True,
         stable_branch_pattern=r"v\d+\.\d+\.\d+")
 
-    builder.add_common_builds(shared_option_name="%s:shared" % name)
+    builder.add_common_builds(shared_option_name="%s:shared" % name, pure_c=False)
     builder.run()
