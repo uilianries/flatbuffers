@@ -2,6 +2,21 @@ env:
   global:
     # Set at the root level as this is ignored when set under matrix.env.
     - GCC_VERSION="4.9"
+
+conan-linux: &conan-linux
+   os: linux
+   sudo: required
+   language: python
+   python: "3.6"
+   services:
+    - docker
+   install:
+     - pip install conan conan-package-tools
+   script:
+     - python conan/build.py
+   on:
+     tags: true
+
 matrix:
   include:
     #- language: python
@@ -56,7 +71,6 @@ matrix:
       script:
       - if [ "$BIICODE" == "false" ]; then cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE . && make && make test; fi
       - if [ "$BIICODE" == "true" ] && [ "$TRAVIS_OS_NAME" == "linux" ]; then ./biicode/support/bii-travis.sh $BUILD_TYPE; fi
-      - if [ "$CONAN" == "true" ] && [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo pip install conan && conan create . flatbuffers/testing -s build_type=$BUILD_TYPE; fi
 
     - language: android
       sudo: true
@@ -81,3 +95,18 @@ matrix:
         - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo ln -s -v -f $(which gcc-$GCC_VERSION) /usr/bin/gcc; fi
       script:
         - failed=0; for build_gradle in $(git ls-files | grep build.gradle); do ( cd "$(dirname "${build_gradle}")" && ./gradlew build ) || failed=1; done; exit $((failed))
+
+    - <<: *conan-linux
+      env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=lasote/conangcc49
+    - <<: *conan-linux
+      env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=lasote/conangcc5
+    - <<: *conan-linux
+      env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc6
+    - <<: *conan-linux
+      env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=lasote/conangcc7
+    - <<: *conan-linux
+      env: CONAN_CLANG_VERSIONS=3.9 CONAN_DOCKER_IMAGE=lasote/conanclang39
+    - <<: *conan-linux
+      env: CONAN_CLANG_VERSIONS=4.0 CONAN_DOCKER_IMAGE=lasote/conanclang40
+    - <<: *conan-linux
+      env: CONAN_CLANG_VERSIONS=5.0 CONAN_DOCKER_IMAGE=lasote/conanclang50
