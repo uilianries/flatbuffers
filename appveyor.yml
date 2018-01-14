@@ -2,6 +2,7 @@
   branches:
     only:
       - master
+  skip_tags: true
 
   os: Visual Studio 2015
 
@@ -83,7 +84,12 @@
     - path: tests\GeneratedMyGameCode.zip
       name: GeneratedMyGameCode.zip
 
+
 -
+  branches:
+    only:
+      - master
+  skip_non_tags: true
   build: false
   environment:
     PYTHON: "C:\\Python27"
@@ -106,4 +112,7 @@
     - conan user
 
   test_script:
+    - echo %APPVEYOR_REPO_BRANCH%
+    - echo %APPVEYOR_REPO_TAG%
+    - echo %APPVEYOR_REPO_TAG_NAME%
     - python conan/build.py
