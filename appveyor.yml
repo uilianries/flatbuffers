@@ -84,6 +84,7 @@
       name: GeneratedMyGameCode.zip
 
 -
+  skip_non_tags: true
   build: false
   environment:
     PYTHON: "C:\\Python27"
