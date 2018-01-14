@@ -84,6 +84,9 @@
       name: GeneratedMyGameCode.zip
 
 -
+  branches:
+    only:
+      - /v\d+\.\d+\.\d+/
   build: false
   environment:
     PYTHON: "C:\\Python27"
