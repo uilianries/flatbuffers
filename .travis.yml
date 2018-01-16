@@ -11,9 +11,9 @@ conan-linux: &conan-linux
   services:
     - docker
   install:
-    - pip install conan conan-package-tools
+    - ./conan/travis/install.sh
   script:
-    - python conan/build.py
+    - ./conan/travis/build.sh
   if: tag IS present
 
 conan-osx: &conan-osx
